@@ -1,3 +1,3 @@
 export function checksum(data: string): number {
-	return 0;
+	return [...data].reduce((a, v) => a + v.charCodeAt(0), 0);
 }
