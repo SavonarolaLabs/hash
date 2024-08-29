@@ -1,12 +1,10 @@
 export function fletcher8Checksum(data: string): number {
-	let sum1 = 0xf;
-	let sum2 = 0xf;
-	[...data]
-		.map((c) => c.charCodeAt(0))
-		.forEach((byte) => {
-			sum1 = (sum1 + byte) % 15;
-			sum2 = (sum2 + sum1) % 15;
-		});
+	let sum1 = 0xf,
+		sum2 = 0xf;
+	for (const char of data) {
+		sum1 = (sum1 + char.charCodeAt(0)) % 0xf;
+		sum2 = (sum2 + sum1) % 0xf;
+	}
 	return (sum2 << 4) | sum1;
 }
 
@@ -16,8 +14,8 @@ export function fletcher16Checksum(data: string): number {
 	[...data]
 		.map((c) => c.charCodeAt(0))
 		.forEach((byte) => {
-			sum1 = (sum1 + byte) % 255;
-			sum2 = (sum2 + sum1) % 255;
+			sum1 = (sum1 + byte) % 0xff;
+			sum2 = (sum2 + sum1) % 0xff;
 		});
 	return (sum2 << 8) | sum1;
 }
