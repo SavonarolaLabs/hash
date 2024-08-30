@@ -1,5 +1,15 @@
-import { crc32 } from 'scure-hash';
-
 export function crc32Hash(data: string): string {
-    return crc32(new TextEncoder().encode(data)).toString('hex');
+	let crc = 0xffffffff;
+	for (let byte of data) {
+		crc = crc ^ byte.charCodeAt(0);
+		for (let i = 0; i < 8; i++) {
+			if ((crc & 1) == 1) {
+				crc = (crc >>> 1) ^ 0xedb88320;
+			} else {
+				crc = crc >>> 1;
+			}
+		}
+	}
+	crc = crc ^ 0xffffffff;
+	return crc.toString(16).padStart(8, "0");
 }
